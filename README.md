@@ -1,4 +1,4 @@
-# XDEBUG EASY SETUP
+# XDEBUG EASY SETUP ⚔️🐛
 
 **Get Xdebug running without losing your sanity.** (*No Phd required.*)
 ---
