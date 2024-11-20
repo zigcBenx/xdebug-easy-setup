@@ -1,7 +1,6 @@
 # XDEBUG EASY SETUP
 
-**Get Xdebug running without losing your sanity.**
-*No Phd required.*
+**Get Xdebug running without losing your sanity.** (*No Phd required.*)
 ---
 
 ### **What is this?**  
