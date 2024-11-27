@@ -1,53 +1,81 @@
-Debugger setup for sail is one of the easiest, since guys from Laravel setup almost everything for you.
+### Setting Up Xdebug in Laravel with Sail
 
-All you need to do is add one variable in your project's `.env` file
+Setting up a debugger with Laravel Sail is incredibly straightforward, thanks to the thoughtful setup provided by the Laravel team. Follow these steps to get Xdebug up and running:
 
-`SAIL_XDEBUG_MODE=develop,debug`
+---
 
-After that you need to restart sail.
+### 1. Update Your `.env` File
+Add the following environment variable to your project's `.env` file:
 
+```plaintext
+SAIL_XDEBUG_MODE=develop,debug
+```
 
-After that you click on "Start listening for PHP debug connections in PhpStorm"
-![Start listening fordebug connections](image.png)
+After updating the file, restart Sail to apply the changes:
 
-And then you can enable "Break at first line in PHP script"
-![Break at first line in PHP script](image-1.png)
+```bash
+./vendor/bin/sail down
+./vendor/bin/sail up -d
+```
 
-Last thing you need is Xdebug helper browser extension.
-Extensions links:
-[Firefox](https://addons.mozilla.org/en-GB/firefox/addon/xdebug-helper-for-firefox/)
-[Chrome](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)
-[Edge](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen)
+---
 
-When you have it installed, you can enable debugger - like displayed in the image below.
+### 2. Enable Debugging in PhpStorm
+1. In PhpStorm, click on **"Start Listening for PHP Debug Connections"**.
+   ![Start listening for debug connections](image.png)
+
+2. Optionally, enable **"Break at first line in PHP scripts"** for easier debugging.
+   ![Break at first line in PHP script](image-1.png)
+
+---
+
+### 3. Install the Xdebug Helper Browser Extension
+The Xdebug Helper extension simplifies enabling and disabling debugging in your browser. Install the extension for your preferred browser using the links below:
+
+- [Firefox](https://addons.mozilla.org/en-GB/firefox/addon/xdebug-helper-for-firefox/)  
+- [Chrome](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)  
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen)  
+
+Once installed, activate the debugger in the extension as shown below:  
 ![Enable debugger](image-3.png)
 
+---
 
-Now you can refresh your Laravel app. You should get a popup for incomming xdebug connection from PHPstorm.
-![PhpStorm popup for incoming xdebug connection](image-2.png)
+### 4. Verify the Debugger Connection
+Refresh your Laravel application in the browser. PhpStorm should prompt you to accept an incoming Xdebug connection:  
+![PhpStorm popup for incoming Xdebug connection](image-2.png)  
 
-Click Accept.
+Click **"Accept"**. At this point, the debugger will stop at the first line of your Laravel application, confirming that everything is working! 🚀
 
-Program is stopped at the first line of Laravel application. Debugger is working 🚀.
+---
 
-But we are not done yet!
+### 5. Configure Path Mapping in PhpStorm
+Before proceeding, stop the current debugging session by clicking the red stop button in the bottom-left corner of the PhpStorm debugger toolbar.
 
-Stop the current debugging session, by clicking red stop button on bottom left in debugger toolbar.
+#### Automatic PHP Server Configuration
+When you accepted the incoming connection, PhpStorm automatically created a PHP server named `0.0.0.0`. However, since Sail uses Docker, you need to configure **path mappings** to ensure PhpStorm correctly maps files between your local environment and the Docker container.
 
-By clicking accpet php server was automatically configured in phpstorm.
+#### Setting Up Path Mappings
+1. Open PhpStorm settings:  
+   - Use the shortcut **Ctrl + Alt + S**, or  
+   - Navigate to **File > Settings**.
 
-Since we are using Sail which is based on docker we need to setup path file mapping as well.
-So debugger will now which files map together between our local machine (where we run Phpstorm) and our Docker containers.
+2. Go to **PHP > Servers**.
 
-So open settings (Ctrl + Alt + S) or File > Settings
+3. Select the server named `0.0.0.0` (created earlier).  
 
-Go under PHP > Servers
+4. Add the following path mapping:  
+   - **Local path:** (your project's root directory)  
+   - **Server path:** `/var/www/html`  
 
-You will see the server with name "0.0.0.0". This server was automatically created when we clicked accept on incoming xdebug connection.
-Now we need to setup path mapping, by adding `/var/www/html` in to first available cell in table, like shown in image below.
-This tells phpstorm which local folder maps to which Docker container's folder.
+   Your configuration should look similar to the screenshot below:  
+   ![Setup path mapping in PhpStorm server](image-4.png)
 
-![Setup path mapping in phpstorm server](image-4.png)
+---
 
+### 6. Debug with Breakpoints
+Now that everything is configured:
+- Disable **"Break at first line in PHP scripts"** for smoother debugging.  
+- Add breakpoints anywhere in your project.  
 
-Now your debugger should be setup successfully. You can disable "stop on first line" and add breakpoints wherever you want in your project and the execution should be stopped at that line.
+When you refresh your Laravel application, the debugger will stop at your breakpoints as expected. Happy debugging! 🎉
