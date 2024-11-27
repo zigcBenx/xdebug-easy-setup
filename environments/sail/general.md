@@ -82,4 +82,4 @@ Now that everything is configured:
 - Disable **"Break at first line in PHP scripts"** for smoother debugging.  
 - Add breakpoints anywhere in your project.  
 
-When you refresh your Laravel application, the debugger will stop at your breakpoints as expected. Happy debugging! 🎉
+When you refresh your Laravel application, the debugger will stop at your breakpoints as expected.
