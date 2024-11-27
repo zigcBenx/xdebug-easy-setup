@@ -22,9 +22,11 @@ After updating the file, restart Sail to apply the changes:
 
 ### 2. Enable Debugging in PhpStorm
 1. In PhpStorm, click on **"Start Listening for PHP Debug Connections"**.
+   
    ![Start listening for debug connections](image.png)
 
-2. Optionally, enable **"Break at first line in PHP scripts"** for easier debugging.
+3. Optionally, enable **"Break at first line in PHP scripts"** for easier debugging.
+   
    ![Break at first line in PHP script](image-1.png)
 
 ---
@@ -42,8 +44,10 @@ Once installed, activate the debugger in the extension as shown below:
 ---
 
 ### 4. Verify the Debugger Connection
-Refresh your Laravel application in the browser. PhpStorm should prompt you to accept an incoming Xdebug connection:  
-![PhpStorm popup for incoming Xdebug connection](image-2.png)  
+Refresh your Laravel application in the browser. PhpStorm should prompt you to accept an incoming Xdebug connection:
+
+![PhpStorm popup for incoming Xdebug connection](https://github.com/user-attachments/assets/299b9850-73b4-42a0-a489-3525afcf28b5)
+
 
 Click **"Accept"**. At this point, the debugger will stop at the first line of your Laravel application, confirming that everything is working! 🚀
 
