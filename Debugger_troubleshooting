@@ -1,0 +1,81 @@
+Debugger troubleshooting
+========================
+
+## PHPStorm on Linux with Docker 
+
+When the debugger stops working, it can be a pain to figure out what the problem is.
+Before diving in, make sure none of these are the problem, to save time:
+- __Muted Breakpoints:__ Make sure that breakpoints are enabled and visible (not muted) in PHPStorm.
+- __Break at First Line:__ Temporarily enable this setting in PHPStorm: **(Run -> Break at first line in PHP scripts)**
+- Check, if Linux has __UFW firewall__ installed (disable it and try to run the debugger).
+
+### 1. Verify Installation
+Check if __Xdebug__ is installed in the container:
+```bash
+  docker exec -it <container_name> php -i | grep xdebug
+```
+
+If nothing shows up, revisit the __Dockerfile__ and ensure Xdebug installation is correct.
+
+Ensure the __xdebug.so__ file path in __xdebug.ini__ is accurate by searching for it:
+```bash
+  docker exec -it <container_name> find / -name "xdebug.so"
+```
+
+Validate the configuration file: Inside the container, check if the xdebug.ini file is loaded:
+```bash
+  docker exec -it <container_name> cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+```
+Ensure it matches the expected configuration.
+
+### 2. Test PHP-FPM Configuration
+__Run a PHP script manually:__ Inside the container, run a PHP script to trigger debugging:
+```bash
+  php -r 'xdebug_info();'
+```
+- This should display Xdebug settings. 
+- If Xdebug settings aren't visible, the __zend_extension__ or configuration file may not be loaded correctly.
+
+### 3. Check PHPStorm Configuration
+__PHP Server:__ Ensure the server in PHPStorm matches your container setup:
+- Name matches __PHP_IDE_CONFIG__ in __docker-compose.yml__.
+- Absolute path mappings correspond to container paths.
+
+__Debugger Configuration:__ 
+- Confirm the __PHP remote debug configuration__ has the correct __IDE key (PHPSTORM)__ matching __xdebug.idekey__ in __xdebug.ini__.
+
+### 4. Test Network Configuration
+__Client Host:__
+- For Linux, xdebug.client_host should be set to 172.17.0.1.
+- Inside the container, ensure this address is reachable:
+```bash
+  ping 172.17.0.1
+```
+
+__Ports:__ Ensure port **9003** (default for Xdebug 3) is open on your host machine:
+```bash
+  netstat -an | grep 9003
+```
+__Browser Debugging:__: 
+- Install the Xdebug browser helper extension to toggle debugging and confirm connections: 
+- __Chrome__: [Xdebug helper](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en)
+- __Firefox__: [Xdebug-ext](https://addons.mozilla.org/en-US/firefox/addon/xdebug-ext-quantum/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)      
+
+### 5. Logs and Diagnostics
+__Enable Logging in Xdebug:__ Add this to __xdebug.ini__ for debugging:
+```bash
+  xdebug.log=/tmp/xdebug.log
+  xdebug.log_level=7
+```
+Rebuild the container, trigger debugging, and inspect /tmp/xdebug.log in the container for errors.
+
+__PHPStorm Logs:__ Check logs __(Help -> Show Log in Explorer/Finder)__.
+
+
+### 6. Debugging CLI Commands
+Confirm the PHP_IDE_CONFIG variable is set for CLI debugging in the container:
+```bash
+  export PHP_IDE_CONFIG=serverName=<your_server_name>
+```
+
+If none of this works, look into the [official documentation](https://xdebug.org/docs/).
